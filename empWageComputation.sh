@@ -8,20 +8,16 @@ else
     echo "Employee is Absent"
 fi
 
-isPartTime=0
-isFullTime=1
 isPartTime=1
 isFullTime=2
+monthlyWage=0
 empRatePerHr=20
+maxHrsInMonth=100
+numWorkingDays=20
 
-empCheck=$((RANDOM%2))
+for (( day=1; day<=$numWorkingDays; day++ ))
+do
 
-if [ $isFullTime -eq $empCheck ]
-then
-    empHrs=8;
-else
-    empHrs=4;
-fi
 empCheck=$((RANDOM%3))
 
 case $empCheck in
@@ -35,5 +31,27 @@ case $empCheck in
               empHrs=0;
               ;;
 esac
+totalWorkHours=0
+totalWorkingDays=0
 
 dailyWage=$(($empHrs*$empRatePerHr))
+monthlyWage=$(($monthlyWage+$dailyWage))
+while [[ $totalWorkHours -lt $maxHrsInMonth && $totalWorkingDays -lt $numWorkingDays ]]
+do
+    ((totalWorkingDays++))
+    empCheck=$((RANDOM%3))
+         case $empCheck in
+                  $isFullTime)
+                        empHrs=8;
+                        ;;
+                  $isPartTime)
+                        empHrs=4;
+                        ;;
+                  *)
+                        empHrs=0;
+                        ;;
+         esac
+         totalWorkHours=$(($totalWorkHours+$empHrs))
+done
+done
+        echo monthlyWage=$(($totalWorkHours*$empRatePerHr))
